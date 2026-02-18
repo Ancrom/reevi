@@ -4,7 +4,7 @@ import Gallery from "../components/gallery/Gallery/Gallery";
 export default function Illustration() {
   return (
     <MainLayout>
-      <Gallery tag="illustration" />
+      <Gallery category="illustration" />
     </MainLayout>
   );
 }

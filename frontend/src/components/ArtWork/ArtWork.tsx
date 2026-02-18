@@ -2,6 +2,7 @@ import { useParams } from "react-router";
 import { useEffect, useState } from "react";
 import { client, urlFor } from "../../sanity/client";
 import { NavLink } from "react-router";
+import Icon from "../ui/Icons/Icon";
 import styles from "./ArtWork.module.scss";
 
 interface IArtWork {
@@ -12,7 +13,7 @@ interface IArtWork {
 }
 
 export default function ArtWork() {
-  const { tag, id } = useParams();
+  const { category, id } = useParams();
 
   const [data, setData] = useState<IArtWork>({
     title: "",
@@ -24,19 +25,17 @@ export default function ArtWork() {
   useEffect(() => {
     const query = `*[_type == "artworks" && _id == $id][0] {
     title,
-    image,
-    "prevId": *[_type == "artworks" && $tag in tags && orderRank < ^.orderRank]
+    "image": image.asset->url,
+    "prevId": *[_type == "artworks" && category == $category && orderRank < ^.orderRank]
       | order(orderRank desc)[0]._id,
-    "nextId": *[_type == "artworks" && $tag in tags && orderRank > ^.orderRank]
+    "nextId": *[_type == "artworks" && category == $category && orderRank > ^.orderRank]
       | order(orderRank asc)[0]._id
   }`;
 
-    client.fetch(query, { id, tag } as Record<string, any>).then(setData);
-  }, [id, tag]);
+    client.fetch(query, { id, category } as Record<string, any>).then(setData);
+  }, [id, category]);
 
-  console.log(data);
-
-  if (!data || !data.image) return <div>Loading...</div>;
+  if (!data || !data.image) return <Icon name="spinner" size={24} />;
 
   return (
     <div className={styles.artwork}>
@@ -49,7 +48,7 @@ export default function ArtWork() {
         {data.prevId && (
           <NavLink
             className={styles.back}
-            to={`/artworks/${tag}/${data.prevId}`}
+            to={`/artworks/${category}/${data.prevId}`}
           >
             prev
           </NavLink>
@@ -57,7 +56,7 @@ export default function ArtWork() {
         {data.nextId && (
           <NavLink
             className={styles.next}
-            to={`/artworks/${tag}/${data.nextId}`}
+            to={`/artworks/${category}/${data.nextId}`}
           >
             next
           </NavLink>

@@ -6,7 +6,7 @@ import GalleryItem from "../GalleryItem/GalleryItem";
 import styles from "./Gallery.module.scss";
 
 interface IGalleryProps {
-  tag: string;
+  category: "illustration" | "concept";
 }
 
 interface IArtWork {
@@ -21,16 +21,14 @@ export default function Gallery(props: IGalleryProps) {
   const [projects, setProjects] = useState<IArtWork[]>([]);
 
   useEffect(() => {
-    const query = `*[_type == "artworks" && $tag in tags] | order(orderRank asc){_id,title, image}`;
+    const query = `*[_type == "artworks" && category == $category] | order(orderRank asc){_id,title,"image": image.asset->url}`;
     client
       .fetch<IArtWork[]>(query, {
-        tag: props.tag,
+        category: props.category,
       } as Record<string, any>)
       .then((data) => setProjects(data))
       .catch(console.error);
-  }, [props.tag]);
-
-  console.log(projects);
+  }, [props.category]);
 
   useEffect(() => {
     if (gridRef.current && projects.length > 0) {
@@ -43,7 +41,7 @@ export default function Gallery(props: IGalleryProps) {
       {projects.map((project) => (
         <NavLink
           className={styles.item}
-          to={`/artworks/${props.tag}/${project._id}`}
+          to={`/artworks/${props.category}/${project._id}`}
           key={project._id}
         >
           <GalleryItem artWork={project} />
