@@ -1,0 +1,54 @@
+.artwork {
+	width: 50%;
+	margin: 0 auto;
+	img {
+		width: 100%;
+		object-fit: contain;
+	}
+}
+
+.line {
+	@include flex($gap: 10px, $justify: center);
+	margin: 20px 0;
+}
+
+.back,
+.next {
+	font-size: $fontSizeH2;
+	font-weight: 600;
+	text-transform: uppercase;
+	padding: 20px 20px 30px;
+	&::after {
+		position: absolute;
+		bottom: 0;
+		cursor: pointer;
+	}
+}
+
+.back {
+	position: relative;
+	&::after {
+		@include transition(left, 0.3s, ease);
+		content: "←";
+		left: 0;
+	}
+	&:hover {
+		&::after {
+			left: -10px;
+		}
+	}
+}
+
+.next {
+	position: relative;
+	&::after {
+		@include transition(right, 0.3s, ease);
+		content: "→";
+		right: 0;
+	}
+	&:hover {
+		&::after {
+			right: -10px;
+		}
+	}
+}

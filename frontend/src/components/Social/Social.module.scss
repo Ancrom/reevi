@@ -1,0 +1,14 @@
+.social {
+	@include flex($gap: 20px, $justify: flex-start);
+	svg {
+		fill: $textPrimary;
+	}
+}
+
+.link {
+	@include transition;
+	padding: 10px;
+	&:hover {
+		transform: scale(1.2);
+	}
+}

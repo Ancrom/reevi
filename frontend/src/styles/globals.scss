@@ -1,0 +1,17 @@
+@import "./vars";
+
+html {
+	scrollbar-gutter: stable;
+}
+body {
+	font-family: "Manrope", sans-serif;
+	font-size: $fontSize;
+	color: $textPrimary;
+	background-color: $backgroundPrimary;
+	overflow-x: hidden;
+}
+#root {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}

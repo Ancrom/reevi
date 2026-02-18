@@ -1,0 +1,23 @@
+.nav {
+	ul {
+		@include flex($gap: 0px);
+	}
+}
+
+.link {
+	display: block;
+	padding: 20px 10px;
+	cursor: pointer;
+	&:global(.active) {
+		position: relative;
+		&::after {
+			content: "";
+			position: absolute;
+			bottom: 10px;
+			left: 10px;
+			width: calc(100% - 20px);
+			height: 1px;
+			background-color: $textPrimary;
+		}
+	}
+}
