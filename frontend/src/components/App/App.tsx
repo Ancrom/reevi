@@ -18,7 +18,7 @@ const router = createHashRouter([
     element: <Concept />,
   },
   {
-    path: "/artworks/:tag/:id",
+    path: "/artworks/:category/:id",
     element: <ArtWorkPage />,
   },
   {

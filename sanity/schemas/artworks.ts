@@ -21,6 +21,18 @@ export const artworks = defineType({
       options: {hotspot: true},
     }),
     defineField({name: 'description', title: 'Описание', type: 'text'}),
+    {
+      name: 'category',
+      title: 'Категория',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'Иллюстрация', value: 'illustration'},
+          {title: 'Концепт-арт', value: 'concept'},
+        ],
+        layout: 'dropdown',
+      },
+    },
     defineField({name: 'tags', title: 'Теги', type: 'array', of: [{type: 'string'}]}),
     defineField({
       name: 'relatedArtworks',
