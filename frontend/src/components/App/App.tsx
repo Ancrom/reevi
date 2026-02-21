@@ -1,9 +1,9 @@
 import { createHashRouter, RouterProvider } from "react-router";
-import Illustration from "../../pages/Illustration";
-import About from "../../pages/About";
-import Concept from "../../pages/Concept";
-import Resourses from "../../pages/Resourses";
-import ArtWorkPage from "../../pages/ArtWorkPage";
+import Illustration from "../../pages/illustration/IllustrationPage";
+import About from "../../pages/AboutPage";
+import Concept from "../../pages/concept/ConceptPage";
+import IllustrationIdPage from "../../pages/illustration/IllustrationIdPage";
+import ConceptIdPage from "../../pages/concept/ConceptIdPage";
 import "./App.module.scss";
 import "../../styles/_container.scss";
 import SvgSprite from "../ui/Icons/SvgSprite";
@@ -18,16 +18,16 @@ const router = createHashRouter([
     element: <Concept />,
   },
   {
-    path: "/artworks/:category/:id",
-    element: <ArtWorkPage />,
+    path: "/:type/:id",
+    element: <IllustrationIdPage />,
+  },
+  {
+    path: "/:type/:id/:key",
+    element: <ConceptIdPage />,
   },
   {
     path: "/about",
     element: <About />,
-  },
-  {
-    path: "/resourses",
-    element: <Resourses />,
   },
 ]);
 

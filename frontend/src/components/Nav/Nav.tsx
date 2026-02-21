@@ -20,11 +20,6 @@ export default function Nav() {
             About
           </NavLink>
         </li>
-        <li>
-          <NavLink to="/resourses" className={styles.link}>
-            Resourses
-          </NavLink>
-        </li>
       </ul>
     </nav>
   );

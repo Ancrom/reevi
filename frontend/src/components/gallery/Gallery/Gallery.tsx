@@ -1,52 +1,95 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef } from "react";
 import { NavLink } from "react-router";
 import { GridRowsMasonry } from "grid-rows-masonry";
-import { client } from "../../../sanity/client";
 import GalleryItem from "../GalleryItem/GalleryItem";
 import styles from "./Gallery.module.scss";
+import classNames from "classnames";
 
-interface IGalleryProps {
-  category: "illustration" | "concept";
+export interface ISanityImage {
+  _type: "image";
+  _key: string;
+  asset: {
+    _ref: string;
+    _type: "reference";
+  };
 }
 
-interface IArtWork {
+export interface IIllustration {
   _id: string;
-  title: string;
-  image: any;
-  description?: string;
+  title?: string;
+  image: ISanityImage;
 }
 
-export default function Gallery(props: IGalleryProps) {
-  const gridRef = useRef<HTMLDivElement>(null);
-  const [projects, setProjects] = useState<IArtWork[]>([]);
+export interface IConcept {
+  _type?: "concept";
+  _id: string;
+  title?: string;
+  relatedImages: ISanityImage[];
+}
 
-  useEffect(() => {
-    const query = `*[_type == "artworks" && category == $category] | order(orderRank asc){_id,title,"image": image.asset->url}`;
-    client
-      .fetch<IArtWork[]>(query, {
-        category: props.category,
-      } as Record<string, any>)
-      .then((data) => setProjects(data))
-      .catch(console.error);
-  }, [props.category]);
-
-  useEffect(() => {
-    if (gridRef.current && projects.length > 0) {
-      new GridRowsMasonry(gridRef.current);
+type IGalleryProps =
+  | {
+      type: "concept";
+      items: IConcept;
     }
-  }, [projects]);
+  | {
+      type: "illustration";
+      items: IIllustration[];
+    };
 
-  return (
-    <div ref={gridRef} className={styles.gallery}>
-      {projects.map((project) => (
-        <NavLink
-          className={styles.item}
-          to={`/artworks/${props.category}/${project._id}`}
-          key={project._id}
+export default function Gallery({ items, type }: IGalleryProps) {
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (gridRef.current) {
+      const masonry = new GridRowsMasonry(gridRef.current);
+      return () => masonry.destroy();
+    }
+  }, [items]);
+
+  /* ================= CONCEPT ================= */
+  if (type === "concept" && !Array.isArray(items)) {
+    const conceptId = items._id!;
+    const images = items.relatedImages ?? [];
+
+    return (
+      <div className="container">
+        <div
+          ref={gridRef}
+          className={classNames(styles.gallery, styles.concept)}
         >
-          <GalleryItem artWork={project} />
-        </NavLink>
-      ))}
-    </div>
-  );
+          {images.map((img) => (
+            <NavLink
+              key={img._key}
+              className={styles.item}
+              to={`/concept/${conceptId}/${img._key}`}
+            >
+              <GalleryItem artWork={img} />
+            </NavLink>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  /* ================= ILLUSTRATION ================= */
+  if (type === "illustration" && Array.isArray(items)) {
+    return (
+      <div className="container">
+        <div ref={gridRef} className={styles.gallery}>
+          {items.map((art) => (
+            <NavLink
+              key={art._id}
+              className={styles.item}
+              to={`/illustration/${art._id}`}
+            >
+              <GalleryItem artWork={art} />
+            </NavLink>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  return null;
 }

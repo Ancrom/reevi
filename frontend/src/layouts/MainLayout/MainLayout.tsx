@@ -10,10 +10,8 @@ export default function MainLayout({ children }: IMainLayoutProps) {
   return (
     <>
       <Header />
-      <main className={styles.main}>
-        <div className="container">{children}</div>
-      </main>
-			<Footer />
+      <main className={styles.main}>{children}</main>
+      <Footer />
     </>
   );
 }

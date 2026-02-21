@@ -7,7 +7,7 @@ import {orderableDocumentListDeskItem} from '@sanity/orderable-document-list'
 export default defineConfig({
   name: 'default',
   title: 'reevi',
-	basePath: '/',
+  basePath: '/',
 
   projectId: 'begf0yyf',
   dataset: 'artworks',
@@ -19,12 +19,32 @@ export default defineConfig({
           .title('Контент')
           .items([
             orderableDocumentListDeskItem({
-              type: 'artworks',
-              title: 'Artworks',
+              type: 'illustration',
+              title: 'Иллюстрации',
+              id: 'illustrations-orderable',
               S,
               context,
             }),
-            ...S.documentTypeListItems().filter((item) => item.getId() !== 'artworks'),
+
+            orderableDocumentListDeskItem({
+              type: 'concept',
+              title: 'Концепт',
+              id: 'concepts-orderable',
+              S,
+              context,
+            }),
+
+            orderableDocumentListDeskItem({
+              type: 'social',
+              title: 'Социальные сети',
+              id: 'socials-orderable',
+              S,
+              context,
+            }),
+            S.listItem()
+              .title('Обо мне')
+              .id('aboutPage')
+              .child(S.document().schemaType('about').documentId('about')),
           ]),
     }),
     visionTool(),
@@ -32,5 +52,32 @@ export default defineConfig({
 
   schema: {
     types: schemaTypes,
+    templates: (prev) => [
+      ...prev,
+      {
+        id: 'illustration-default',
+        title: 'Illustration',
+        schemaType: 'illustration',
+        value: {category: 'illustration'},
+      },
+      {
+        id: 'concept-default',
+        title: 'Concept',
+        schemaType: 'concept',
+        value: {category: 'concept'},
+      },
+      {
+        id: 'about-default',
+        title: 'About',
+        schemaType: 'about',
+        value: {category: 'about'},
+      },
+      {
+        id: 'social-default',
+        title: 'Social',
+        schemaType: 'social',
+        value: {category: 'social'},
+      },
+    ],
   },
 })
