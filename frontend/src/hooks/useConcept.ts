@@ -1,56 +1,36 @@
-import { useEffect, useState } from "react";
 import { client } from "../sanity/client";
-import {
-  type ISanityImage,
-  type IConcept,
-} from "../components/gallery/Gallery/Gallery";
-
-export interface IConceptView {
-  _id: string;
-  title?: string;
-  image: ISanityImage;
-  nav: {
-    prev?: string;
-    next?: string;
-  };
-}
+import { type IArtView, type IConcept } from "../types/galleryTypes";
+import { useQuery } from "@tanstack/react-query";
 
 export function useConcept(id: string, key: string) {
-  const [data, setData] = useState<IConceptView | null>(null);
-  const [loading, setLoading] = useState(true);
+  const query = `*[_type == "concept" && _id == $id][0] {_id,title,relatedImages}`;
+  const { data, isLoading } = useQuery({
+    queryKey: ["concepts"],
+    queryFn: () => client.fetch<IConcept>(query, { id }),
+    staleTime: Infinity,
+  });
+  const formatData = (data: IConcept): IArtView => {
+    const images = data.relatedImages || [];
+    let i = 0;
+    if (key) {
+      const idx = images.findIndex((img) => img._key === key);
+      if (idx >= 0) i = idx;
+    }
 
-  useEffect(() => {
-    const query = `*[_type == "concept" && _id == $id][0] {_id,title,relatedImages}`;
-    client.fetch<IConcept>(query, { id }).then((res) => {
-      if (!res) {
-        setData(null);
-        setLoading(false);
-        return;
-      }
+    const image = images[i];
+    const prev = i > 0 ? images[i - 1]._key : undefined;
+    const next = i < images.length - 1 ? images[i + 1]._key : undefined;
 
-      const images = res.relatedImages || [];
-      let i = 0;
-      if (key) {
-        const idx = images.findIndex((img) => img._key === key);
-        if (idx >= 0) i = idx;
-      }
+    return {
+      _id: data._id,
+      title: data.title,
+      image,
+      nav: {
+        prev: prev ? `/concept/${data._id}/${prev}` : undefined,
+        next: next ? `/concept/${data._id}/${next}` : undefined,
+      },
+    };
+  };
 
-      const image = images[i];
-      const prev = i > 0 ? images[i - 1]._key : undefined;
-      const next = i < images.length - 1 ? images[i + 1]._key : undefined;
-
-      setData({
-        _id: res._id,
-        title: res.title,
-        image,
-        nav: {
-          prev: prev ? `/concept/${res._id}/${prev}` : undefined,
-          next: next ? `/concept/${res._id}/${next}` : undefined,
-        },
-      });
-      setLoading(false);
-    });
-  }, [id, key]);
-
-  return { data, loading };
+  return { data: data ? formatData(data) : null, isLoading };
 }

@@ -1,12 +1,11 @@
 import { urlFor } from "../../sanity/client";
 import { NavLink } from "react-router";
-import type { IIllustrationView } from "../../hooks/useIllustration";
-import type { IConceptView } from "../../hooks/useConcept";
+import { type IArtView } from "../../types/galleryTypes";
 import Icon from "../ui/Icons/Icon";
 import styles from "./ArtWork.module.scss";
 
 interface IArtWorkProps {
-  items: IIllustrationView | IConceptView;
+  items: IArtView;
 }
 
 export default function ArtWork({ items }: IArtWorkProps) {

@@ -1,33 +1,16 @@
-import { useEffect, useState } from "react";
 import { client } from "../sanity/client";
-import {
-  type IIllustration,
-  type ISanityImage,
-} from "../components/gallery/Gallery/Gallery";
-
-export interface IIllustrationView {
-  _id: string;
-  title?: string;
-  image: ISanityImage;
-  nav: {
-    prev?: string;
-    next?: string;
-  };
-}
+import { type IArtView } from "../types/galleryTypes";
+import { useQuery } from "@tanstack/react-query";
 
 export function useIllustration(
   type: string | undefined,
   id: string | undefined,
 ) {
-  const [data, setData] = useState<IIllustrationView | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    if (!type || !id) return;
-
-    setLoading(true);
-
-    const query = `
+  const { data, isLoading } = useQuery({
+    queryKey: ["illustrations"],
+    queryFn: () =>
+      client.fetch<IArtView>(
+        `
       *[_type == $type && _id == $id][0] {
         _id,
         title,
@@ -38,28 +21,22 @@ export function useIllustration(
         	"next": *[_type == $type && orderRank > ^.orderRank]
           	| order(orderRank asc)[0]._id}
       	}
-    `;
+    `,
+        { type, id },
+      ),
+    staleTime: Infinity,
+  });
+  const formatedData = (data: IArtView) => {
+    return {
+      _id: data._id,
+      title: data.title,
+      image: data.image,
+      nav: {
+        prev: data.nav.prev ? `/illustration/${data.nav.prev}` : undefined,
+        next: data.nav.next ? `/illustration/${data.nav.next}` : undefined,
+      },
+    };
+  };
 
-    client.fetch<IIllustrationView>(query, { type, id }).then((res) => {
-      if (!res) {
-        setData(null);
-        setLoading(false);
-        return;
-      }
-
-      setData({
-        _id: res._id,
-        title: res.title,
-        image: res.image,
-        nav: {
-          prev: res.nav.prev ? `/illustration/${res.nav.prev}` : undefined,
-          next: res.nav.next ? `/illustration/${res.nav.next}` : undefined,
-        },
-      });
-
-      setLoading(false);
-    });
-  }, [id, type]);
-
-  return { data, loading };
+  return { data: data ? formatedData(data) : null, isLoading };
 }

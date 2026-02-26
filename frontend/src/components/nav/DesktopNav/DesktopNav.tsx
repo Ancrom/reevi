@@ -1,7 +1,7 @@
 import { NavLink } from "react-router";
-import styles from "./Nav.module.scss";
+import styles from "./DesktopNav.module.scss";
 
-export default function Nav() {
+export default function DesktopNav() {
   return (
     <nav className={styles.nav}>
       <ul>

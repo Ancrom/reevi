@@ -4,4 +4,7 @@
 .title {
 	font-size: 30px;
 	text-align: center;
+	@media (width < 1024px) {
+		font-size: 22px;
+	}
 }

@@ -1,5 +1,6 @@
 .concept {
-	@include flex($direction: row, $justify: space-between, $align: stretch, $gap: 20px);
+	@include flex($direction: row, $justify: space-between, $align: stretch, $gap: 0, $wrap: nowrap);
+	min-height: 100vh;
 	&:global(.container) {
 		max-width: 1400px;
 	}
@@ -20,17 +21,24 @@
 		height: 100%;
 		background-color: rgba(0, 0, 0, 0.05);
 	}
+	@media (width < 1024px) {
+		flex: 0 1 auto;
+		padding: 0 20px 0 0;
+	}
 }
 
 .button {
 	width: 100%;
 	text-align: left;
 	font-size: $fontSizeH1;
+	@media (width < 1024px) {
+		font-size: $fontSizeBig;
+	}
 }
 
 .content {
 	@include flex(column);
-	flex: 0 1 70%;
+	flex: 1 0 70%;
 }
 
 .active {

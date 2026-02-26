@@ -20,6 +20,17 @@ export default function SvgSprite() {
           fill="currentColor"
         />
       </symbol>
+      <symbol>
+        <path
+          id="icon-menu"
+          d="M3 12H21M3 6H21M3 18H21"
+          viewBox="0 0 24 24"
+          stroke="black"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </symbol>
     </svg>
   );
 }

@@ -1,18 +1,11 @@
 import { client } from "../sanity/client";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 export function useArtworks<T>(type: string) {
-  const [data, setData] = useState<T[] | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    client
-      .fetch<T[]>(`*[_type == $type] | order(orderRank)`, { type })
-      .then((res) => {
-        setData(res);
-        setLoading(false);
-      });
-  }, [type]);
-
-  return { data, loading };
+  return useQuery({
+    queryKey: ["artworks", type],
+    queryFn: () =>
+      client.fetch<T[]>(`*[_type == $type] | order(orderRank)`, { type }),
+    staleTime: Infinity,
+  });
 }

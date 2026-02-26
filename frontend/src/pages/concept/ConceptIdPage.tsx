@@ -6,13 +6,13 @@ import Icon from "../../components/ui/Icons/Icon";
 
 export default function ConceptIdPage() {
   const { id, key } = useParams();
-  const { data, loading } = useConcept(id!, key!);
+  const { data, isLoading } = useConcept(id!, key!);
 
   return (
     <MainLayout>
-      {loading && <Icon name="spinner" size={24} />}
+      {isLoading && <Icon name="spinner" size={24} className="spinner"/>}
       {data && <ArtWork items={data} />}
-      {!loading && !data && (
+      {!isLoading && !data && (
         <div className="container">
           <h1>Работа не найдена</h1>
         </div>

@@ -4,13 +4,13 @@ import { useAbout } from "../hooks/useAbout";
 import Icon from "../components/ui/Icons/Icon";
 
 export default function AboutPage() {
-  const { data, loading } = useAbout();
+  const { data, isLoading } = useAbout();
 
   return (
     <MainLayout>
-      {loading && <Icon name="spinner" size={24} />}
+      {isLoading && <Icon name="spinner" size={24} className="spinner"/>}
       {data && <About data={data} />}
-      {!loading && !data && (
+      {!isLoading && !data && (
         <div className="container">
           <h1>Ошибка загрузки данных</h1>
         </div>

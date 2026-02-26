@@ -1,5 +1,5 @@
 import { client } from "../sanity/client";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 export interface IAboutData {
   title: string;
@@ -8,15 +8,10 @@ export interface IAboutData {
 }
 
 export function useAbout() {
-  const [data, setData] = useState<IAboutData | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    client.fetch(`*[_type == "about"][0] {title,photo,content}`).then((res) => {
-      setData(res);
-      setLoading(false);
-    });
-  }, []);
-
-  return { data, loading };
+  return useQuery({
+    queryKey: ["about"],
+    queryFn: () =>
+      client.fetch<IAboutData>(`*[_type == "about"][0] {title,photo,content}`),
+    staleTime: Infinity,
+  });
 }

@@ -1,31 +1,10 @@
 import { useEffect, useRef } from "react";
 import { NavLink } from "react-router";
 import { GridRowsMasonry } from "grid-rows-masonry";
+import { type IConcept, type IIllustration } from "../../../types/galleryTypes";
 import GalleryItem from "../GalleryItem/GalleryItem";
 import styles from "./Gallery.module.scss";
 import classNames from "classnames";
-
-export interface ISanityImage {
-  _type: "image";
-  _key: string;
-  asset: {
-    _ref: string;
-    _type: "reference";
-  };
-}
-
-export interface IIllustration {
-  _id: string;
-  title?: string;
-  image: ISanityImage;
-}
-
-export interface IConcept {
-  _type?: "concept";
-  _id: string;
-  title?: string;
-  relatedImages: ISanityImage[];
-}
 
 type IGalleryProps =
   | {

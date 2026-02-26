@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import classnames from "classnames";
-import Gallery, { type IConcept } from "../gallery/Gallery/Gallery";
+import Gallery from "../gallery/Gallery/Gallery";
+import type { IConcept } from "../../types/galleryTypes";
 import styles from "./Concent.module.scss";
 
 interface IConceptProps {
@@ -24,14 +25,12 @@ export default function Concept({ data }: IConceptProps) {
     <div className={classnames(styles.concept, "container")}>
       <div className={styles.aside}>
         {data.map((item) => {
-          let clazz = "";
-          if (item._id === activeConcept?._id) {
-            clazz = styles.active;
-          }
           return (
             <button
               key={item._id}
-              className={classnames(styles.button, clazz)}
+              className={classnames(styles.button, {
+                [styles.active]: item._id === activeConcept?._id,
+              })}
               onClick={() => handleClick(item)}
             >
               <span>{item.title}</span>

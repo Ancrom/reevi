@@ -3,12 +3,21 @@
 	svg {
 		fill: $textPrimary;
 	}
+	@media (width <= 1024px) {
+		gap: 0;
+	}
 }
 
 .link {
 	@include transition;
 	padding: 10px;
+
 	&:hover {
 		transform: scale(1.2);
 	}
+}
+
+.image {
+	width: 24px;
+	height: 24px;
 }
