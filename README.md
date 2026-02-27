@@ -12,6 +12,7 @@
 - **React Router 7**
 - **Sanity Client**
 - **grid-rows-masonry**
+- **framer-motion**
 
 ### Backend (CMS)
 - **Sanity Studio v3** — headless CMS для управления контентом (загрузка работ, описание, категории).
