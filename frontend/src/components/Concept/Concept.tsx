@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { useInView } from "../../hooks/useInView";
 import classnames from "classnames";
 import Gallery from "../gallery/Gallery/Gallery";
 import type { IConcept } from "../../types/galleryTypes";
@@ -10,6 +12,7 @@ interface IConceptProps {
 
 export default function Concept({ data }: IConceptProps) {
   const [activeConcept, setActiveConcept] = useState<IConcept>(data[0]);
+  const { ref, isInView } = useInView();
 
   useEffect(() => {
     if (data && data.length > 0 && !activeConcept) {
@@ -23,7 +26,15 @@ export default function Concept({ data }: IConceptProps) {
 
   return (
     <div className={classnames(styles.concept, "container")}>
-      <div className={styles.aside}>
+      <motion.div
+        ref={ref}
+        className={styles.aside}
+        initial={{ opacity: 0, y: 30 }}
+        animate={isInView ? { opacity: 1, y: 0 } : {}}
+        transition={{
+          ease: "easeOut",
+        }}
+      >
         {data.map((item) => {
           return (
             <button
@@ -37,7 +48,7 @@ export default function Concept({ data }: IConceptProps) {
             </button>
           );
         })}
-      </div>
+      </motion.div>
       <div className={styles.content}>
         {activeConcept && <Gallery items={activeConcept} type="concept" />}
       </div>

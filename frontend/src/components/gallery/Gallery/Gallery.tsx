@@ -37,13 +37,13 @@ export default function Gallery({ items, type }: IGalleryProps) {
           ref={gridRef}
           className={classNames(styles.gallery, styles.concept)}
         >
-          {images.map((img) => (
+          {images.map((img, index) => (
             <NavLink
               key={img._key}
               className={styles.item}
               to={`/concept/${conceptId}/${img._key}`}
             >
-              <GalleryItem artWork={img} />
+              <GalleryItem artWork={img} index={index} />
             </NavLink>
           ))}
         </div>
@@ -56,13 +56,13 @@ export default function Gallery({ items, type }: IGalleryProps) {
     return (
       <div className="container">
         <div ref={gridRef} className={styles.gallery}>
-          {items.map((art) => (
+          {items.map((art, index) => (
             <NavLink
               key={art._id}
               className={styles.item}
               to={`/illustration/${art._id}`}
             >
-              <GalleryItem artWork={art} />
+              <GalleryItem artWork={art} index={index} />
             </NavLink>
           ))}
         </div>
