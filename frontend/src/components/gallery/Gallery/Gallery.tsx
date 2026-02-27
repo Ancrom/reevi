@@ -26,6 +26,9 @@ export default function Gallery({ items, type }: IGalleryProps) {
     }
   }, [items]);
 
+	console.log(items);
+	
+
   /* ================= CONCEPT ================= */
   if (type === "concept" && !Array.isArray(items)) {
     const conceptId = items._id!;

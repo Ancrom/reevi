@@ -5,7 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 export function useConcept(id: string, key: string) {
   const query = `*[_type == "concept" && _id == $id][0] {_id,title,relatedImages}`;
   const { data, isLoading } = useQuery({
-    queryKey: ["concepts"],
+    queryKey: ["concepts", id, key],
     queryFn: () => client.fetch<IConcept>(query, { id }),
     staleTime: Infinity,
   });

@@ -7,7 +7,7 @@ export function useIllustration(
   id: string | undefined,
 ) {
   const { data, isLoading } = useQuery({
-    queryKey: ["illustrations"],
+    queryKey: ["illustrations", type, id],
     queryFn: () =>
       client.fetch<IArtView>(
         `
@@ -24,6 +24,7 @@ export function useIllustration(
     `,
         { type, id },
       ),
+    enabled: !!type && !!id,
     staleTime: Infinity,
   });
   const formatedData = (data: IArtView) => {
